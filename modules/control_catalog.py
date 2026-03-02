@@ -37,7 +37,7 @@ def render():
 
     /* Expander body */
     div[data-testid="stExpanderDetails"] {
-        background-color: #f9fbfd !important;
+        background-color: #000000 !important;
         color: black !important;
         border-radius: 8px;
         padding: 10px;
