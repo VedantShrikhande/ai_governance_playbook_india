@@ -14,7 +14,7 @@ def render():
 
     st.markdown("""
     ### Purpose
-    This Playbook operationalizes the India AI Governance Framework into executable governance workflows.
+    This Playbook operationalizes the India AI Governance Framework 2025–26 into structured, executable governance workflows. It translates high-level policy principles into practical lifecycle controls covering governance, risk classification, data protection, secure development, evaluation, deployment, monitoring, incident response, and assurance. Designed for enterprise and public-sector adoption, it enables organizations to implement responsible, transparent, and accountable AI systems aligned with constitutional safeguards, regulatory mandates, and global best practices.
 
     ### Audience
     - Board & Apex Leadership
@@ -24,8 +24,9 @@ def render():
     - Compliance Teams
 
     ### Scope
-    Applies to all AI systems across lifecycle stages:
-    Plan → Design → Build → Evaluate → Deploy → Monitor → Respond → Assure
+This Playbook applies to all AI systems across their full lifecycle: 
+Plan → Design → Build → Evaluate → Deploy → Monitor → Respond → Assure. 
+It covers both internal and externally facing AI deployments, including high-risk systems requiring enhanced oversight. The scope includes governance structures, compliance with the DPDP Act, CERT-In reporting readiness, ISO 42001 alignment, fairness evaluation, security controls, and continuous monitoring to ensure sustainable, risk-proportionate AI governance.
     """)
 
     st.info("This structure mirrors international AI RMF playbook standards, localized for India.")
