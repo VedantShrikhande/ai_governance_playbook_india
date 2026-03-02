@@ -1,0 +1,4 @@
+System Name,Sector,Owner,Risk Level,Data Type,Deployment Status,Last Evaluation Date
+Credit Scoring AI,Banking,FinTech Team,High,Personal Data,Production,2025-09-01
+Fraud Detection Model,Banking,Risk Dept,Medium,Transaction Data,Testing,2025-08-15
+Customer Support Chatbot,Telecom,IT Team,Low,Non-sensitive Data,Production,2025-07-20

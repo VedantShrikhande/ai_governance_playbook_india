@@ -1,0 +1,3 @@
+System Name,Lawful Basis,Purpose Limitation Defined,Data Minimization Applied,Bias Assessment Completed,Explainability Mechanism,Approval Status
+Credit Scoring AI,Consent,Yes,Yes,Yes,SHAP Explanation,Approved
+Fraud Detection Model,Legitimate Interest,Yes,Yes,Pending,LIME Explanation,Under Review

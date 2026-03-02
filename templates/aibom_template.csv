@@ -1,0 +1,3 @@
+Model Name,Training Dataset,Pretrained Model Used,Libraries,Third-Party APIs,Version Control Enabled,Model Card Available
+Credit Scoring Model,Loan Dataset v2,None,Scikit-learn; Pandas,None,Yes,Yes
+Chatbot Assistant,Public FAQ Dataset,GPT Base Model,Transformers; Torch,OpenAI API,Yes,Yes
