@@ -92,29 +92,21 @@ def render():
     st.markdown(f"### Showing {len(filtered_df)} Controls")
 
     # Display controls
-    for _, row in filtered_df.iterrows():
-        with st.expander(f"{row['Control ID']} — {row['Control Title']}"):
+for _, row in filtered_df.iterrows():
+    with st.expander(f"{row['Control ID']} — {row['Control Title']}"):
 
-            st.markdown(
-                f"""
-                <div class='control-card'>
-                <b>Lifecycle Stage:</b> {row['Lifecycle Stage']}<br>
-                <b>Category:</b> {row['Control Category']}<br>
-                <b>Risk Level:</b> {row['Applicable Risk Level']}<br>
-                <b>Responsible Role:</b> {row['Responsible Role']}<br><br>
+        st.write("**Lifecycle Stage:**", row["Lifecycle Stage"])
+        st.write("**Category:**", row["Control Category"])
+        st.write("**Risk Level:**", row["Applicable Risk Level"])
+        st.write("**Responsible Role:**", row["Responsible Role"])
 
-                <h4 style='color:#1f4e79;'>Control Description</h4>
-                <p>{row['Detailed Control Description (~150 words)']}</p>
+        st.markdown("### Control Description")
+        st.write(row["Detailed Control Description (~150 words)"])
 
-                <h4 style='color:#1f4e79;'>Regulatory Mapping</h4>
-                <p>{row['Detailed Regulatory Mapping']}</p>
+        st.markdown("### Regulatory Mapping")
+        st.write(row["Detailed Regulatory Mapping"])
 
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-
-            st.markdown("### 🔗 References")
-            st.markdown("[DPDP Act 2023](https://www.meity.gov.in/writereaddata/files/DPDP%20Act%202023.pdf)")
-            st.markdown("[CERT-In Directions](https://www.cert-in.org.in/)")
-            st.markdown("[ISO 42001](https://www.iso.org/standard/81230.html)")
+        st.markdown("### References")
+        st.markdown("- [DPDP Act 2023](https://www.meity.gov.in/writereaddata/files/DPDP%20Act%202023.pdf)")
+        st.markdown("- [CERT-In Directions](https://www.cert-in.org.in/)")
+        st.markdown("- [ISO 42001](https://www.iso.org/standard/81230.html)")
