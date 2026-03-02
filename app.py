@@ -10,6 +10,7 @@ Original file is located at
 import streamlit as st
 
 from modules import overview
+from modules import control_catalog
 from modules import plan_govern
 from modules import define_design
 from modules import develop_train
@@ -26,6 +27,20 @@ st.set_page_config(
     layout="wide"
 )
 
+st.markdown("""
+    <style>
+        .stExpander {
+            border-radius: 10px;
+            border: 1px solid #e6e6e6;
+            background-color: #f9fbfd;
+        }
+        .stButton>button {
+            border-radius: 8px;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+
 st.title("🇮🇳 India AI Governance Playbook 2026")
 st.markdown("Structured Playbook aligned with National AI Governance Framework")
 
@@ -33,6 +48,7 @@ menu = st.sidebar.radio(
     "Playbook Navigation",
     [
         "Overview",
+        "Control Catalog",
         "Plan & Govern",
         "Define & Design",
         "Develop & Train",
@@ -48,6 +64,9 @@ menu = st.sidebar.radio(
 
 if menu == "Overview":
     overview.render()
+
+elif menu == "Control Catalog":
+    control_catalog.render()
 
 elif menu == "Plan & Govern":
     plan_govern.render()
