@@ -24,9 +24,9 @@ def render():
     - Compliance Teams
 
     ### Scope
-This Playbook applies to all AI systems across their full lifecycle: 
-Plan → Design → Build → Evaluate → Deploy → Monitor → Respond → Assure. 
-It covers both internal and externally facing AI deployments, including high-risk systems requiring enhanced oversight. The scope includes governance structures, compliance with the DPDP Act, CERT-In reporting readiness, ISO 42001 alignment, fairness evaluation, security controls, and continuous monitoring to ensure sustainable, risk-proportionate AI governance.
+    This Playbook applies to all AI systems across their full lifecycle: 
+    Plan → Design → Build → Evaluate → Deploy → Monitor → Respond → Assure. 
+    It covers both internal and externally facing AI deployments, including high-risk systems requiring enhanced oversight. The scope includes governance structures, compliance with the DPDP Act, CERT-In reporting readiness, ISO 42001 alignment, fairness evaluation, security controls, and continuous monitoring to ensure sustainable, risk-proportionate AI governance.
     """)
 
     st.info("This structure mirrors international AI RMF playbook standards, localized for India.")
