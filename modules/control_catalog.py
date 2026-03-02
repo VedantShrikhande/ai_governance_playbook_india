@@ -4,6 +4,48 @@ import pandas as pd
 
 def render():
 
+    # 🔥 Safe CSS Styling
+    st.markdown("""
+    <style>
+
+    /* Force light clean background */
+    .stApp {
+        background-color: #ffffff;
+        color: #000000;
+    }
+
+    /* Force all text black */
+    html, body, [class*="css"] {
+        color: #000000 !important;
+    }
+
+    /* Dropdown text */
+    div[data-baseweb="select"] * {
+        color: black !important;
+    }
+
+    div[data-baseweb="popover"] * {
+        color: black !important;
+        background-color: white !important;
+    }
+
+    /* Expander header */
+    div[data-testid="stExpander"] summary {
+        color: black !important;
+        font-weight: 600;
+    }
+
+    /* Expander body */
+    div[data-testid="stExpanderDetails"] {
+        background-color: #f9fbfd !important;
+        color: black !important;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    </style>
+    """, unsafe_allow_html=True)
+
     st.markdown("## 📚 India AI Governance – Control Catalog")
 
     # Load Excel
@@ -49,7 +91,6 @@ def render():
 
     st.markdown(f"### Showing {len(filtered_df)} Controls")
 
-    # 🔥 THIS LOOP MUST BE INSIDE render()
     for _, row in filtered_df.iterrows():
 
         with st.expander(f"{row['Control ID']} — {row['Control Title']}"):
