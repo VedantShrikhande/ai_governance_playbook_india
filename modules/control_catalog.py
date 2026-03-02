@@ -12,11 +12,36 @@ import pandas as pd
 
 def render():
 
-    st.markdown("""
-        <h2 style='text-align: left; color: #1f4e79;'>
-        📚 India AI Governance – Control Catalog
-        </h2>
-    """, unsafe_allow_html=True)
+st.markdown("""
+<style>
+
+/* Control catalog container */
+.control-card {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* Expander header text */
+div[data-testid="stExpander"] summary {
+    color: #000000 !important;
+    font-weight: 600;
+}
+
+/* Expander body */
+div[data-testid="stExpanderDetails"] {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* Paragraph text inside expander */
+div[data-testid="stExpanderDetails"] p {
+    color: #000000 !important;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
     # Load Excel
     df = pd.read_excel("data/India_AI_Governance_Framework_Playbook_FINAL_DETAILED.xlsx")
