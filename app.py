@@ -41,8 +41,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-st.title("🇮🇳 India AI Governance Playbook 2026")
-st.markdown("Structured Playbook aligned with National AI Governance Framework")
+st.title("India AI Governance Playbook")
+st.markdown("Playbook is aligned with National AI Governance Framework India")
+
 
 menu = st.sidebar.radio(
     "Playbook Navigation",
