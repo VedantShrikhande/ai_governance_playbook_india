@@ -21,17 +21,17 @@ def render():
 
     /* Dropdown text */
     div[data-baseweb="select"] * {
-        color: black !important;
+        color: #000000 !important;
     }
 
     div[data-baseweb="popover"] * {
-        color: black !important;
+        color: #000000 !important;
         background-color: white !important;
     }
 
     /* Expander header */
     div[data-testid="stExpander"] summary {
-        color: black !important;
+        color: #000000 !important;
         font-weight: 600;
     }
 
