@@ -10,8 +10,8 @@ def render():
 
     /* Force light clean background */
     .stApp {
-        background-color: #ffffff;
-        color: #000000;
+        background-color: #000000;
+        color: #ffffff;
     }
 
     /* Force all text black */
