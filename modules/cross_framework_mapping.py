@@ -12,64 +12,101 @@ import pandas as pd
 
 def render():
 
+    # --------------------------------------------------
+    # Aesthetic Styling
+    # --------------------------------------------------
+
     st.markdown("""
     <style>
     .framework-card {
         background-color: #ffffff;
-        padding: 18px;
-        border-radius: 12px;
-        box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
-        margin-bottom: 15px;
+        padding: 20px;
+        border-radius: 14px;
+        box-shadow: 0px 4px 12px rgba(0,0,0,0.06);
+        margin-bottom: 18px;
     }
 
-    .india {
-        border-left: 6px solid #1f4e79;
-    }
-
-    .nist {
-        border-left: 6px solid #2ca02c;
-    }
-
-    .ucf {
-        border-left: 6px solid #ff7f0e;
-    }
+    .india { border-left: 6px solid #1f4e79; }
+    .nist  { border-left: 6px solid #2ca02c; }
+    .ucf   { border-left: 6px solid #ff7f0e; }
 
     .badge {
         font-weight: 600;
         font-size: 14px;
-        padding: 4px 10px;
+        padding: 5px 12px;
         border-radius: 20px;
         display: inline-block;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
     }
 
     .india-badge { background-color:#e8f0fe; color:#1f4e79; }
-    .nist-badge { background-color:#e6f4ea; color:#2ca02c; }
-    .ucf-badge { background-color:#fff3e0; color:#ff7f0e; }
+    .nist-badge  { background-color:#e6f4ea; color:#2ca02c; }
+    .ucf-badge   { background-color:#fff3e0; color:#ff7f0e; }
 
     </style>
     """, unsafe_allow_html=True)
 
     st.markdown("## 🔗 Cross-Framework Mapping")
-    st.markdown("Structured one-to-one mapping between India AI Governance, NIST AI RMF, and Unified Control Framework.")
+    st.markdown(
+        "Structured one-to-one lifecycle-aligned mapping between "
+        "India AI Governance Framework, NIST AI RMF, and Unified Control Framework."
+    )
 
-    # Load mapping file
+    # --------------------------------------------------
+    # Load Mapping Excel
+    # --------------------------------------------------
+
     df = pd.read_excel(
         "data/India_AI_Cross_Framework_Mapping_Unique_OneToOne.xlsx",
         engine="openpyxl"
     )
 
-    # Dropdown
+    # --------------------------------------------------
+    # Filters
+    # --------------------------------------------------
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        lifecycle_filter = st.selectbox(
+            "Filter by Lifecycle Stage",
+            ["All"] + sorted(df["Lifecycle Stage"].dropna().unique())
+        )
+
+    with col2:
+        search = st.text_input("Search Control ID")
+
+    filtered_df = df.copy()
+
+    if lifecycle_filter != "All":
+        filtered_df = filtered_df[
+            filtered_df["Lifecycle Stage"] == lifecycle_filter
+        ]
+
+    if search:
+        filtered_df = filtered_df[
+            filtered_df["India Control ID"].str.contains(search, case=False)
+        ]
+
+    # --------------------------------------------------
+    # Control Selection
+    # --------------------------------------------------
+
     selected_control = st.selectbox(
         "Select India AI Governance Control",
-        df["India Control ID"]
+        filtered_df["India Control ID"]
     )
 
-    row = df[df["India Control ID"] == selected_control].iloc[0]
+    row = filtered_df[
+        filtered_df["India Control ID"] == selected_control
+    ].iloc[0]
 
     st.markdown("---")
 
+    # --------------------------------------------------
     # India Card
+    # --------------------------------------------------
+
     st.markdown(f"""
     <div class="framework-card india">
         <span class="badge india-badge">🇮🇳 India AI Governance</span>
@@ -79,24 +116,32 @@ def render():
     </div>
     """, unsafe_allow_html=True)
 
+    # --------------------------------------------------
     # NIST Card
+    # --------------------------------------------------
+
     st.markdown(f"""
     <div class="framework-card nist">
         <span class="badge nist-badge">🇺🇸 NIST AI RMF</span>
         <h4>{row['Mapped NIST Control']}</h4>
         <p><b>Function:</b> {row['Mapped NIST Function']}</p>
-        <p><b>Similarity Score:</b> {row['NIST Similarity Score']}</p>
     </div>
     """, unsafe_allow_html=True)
 
+    # --------------------------------------------------
     # UCF Card
+    # --------------------------------------------------
+
     st.markdown(f"""
     <div class="framework-card ucf">
         <span class="badge ucf-badge">📘 Unified Control Framework</span>
         <h4>{row['Mapped UCF Control']}</h4>
-        <p><b>Similarity Score:</b> {row['UCF Control Similarity Score']}</p>
     </div>
     """, unsafe_allow_html=True)
 
     st.markdown("---")
-    st.info("Mapping follows lifecycle-aligned, structured one-to-one assignment without duplication.")
+
+    st.success(
+        "✔ Mapping follows unique one-to-one structured lifecycle alignment. "
+        "No duplication across frameworks."
+    )
