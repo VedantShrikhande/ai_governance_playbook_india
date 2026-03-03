@@ -9,145 +9,95 @@ Original file is located at
 
 import streamlit as st
 import pandas as pd
-import numpy as np
-
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from rapidfuzz import fuzz
 
 
 def render():
 
-    st.markdown("## 🔗 Cross-Framework Control Mapping (Hybrid NLP Engine)")
+    st.markdown("""
+    <style>
+    .framework-card {
+        background-color: #ffffff;
+        padding: 18px;
+        border-radius: 12px;
+        box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
+        margin-bottom: 15px;
+    }
 
-    # ---------------------------------------------------
-    # Load Datasets
-    # ---------------------------------------------------
+    .india {
+        border-left: 6px solid #1f4e79;
+    }
 
-    india_df = pd.read_excel(
-        "data/India_AI_Governance_Framework_Playbook_FINAL_DETAILED.xlsx",
+    .nist {
+        border-left: 6px solid #2ca02c;
+    }
+
+    .ucf {
+        border-left: 6px solid #ff7f0e;
+    }
+
+    .badge {
+        font-weight: 600;
+        font-size: 14px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        display: inline-block;
+        margin-bottom: 8px;
+    }
+
+    .india-badge { background-color:#e8f0fe; color:#1f4e79; }
+    .nist-badge { background-color:#e6f4ea; color:#2ca02c; }
+    .ucf-badge { background-color:#fff3e0; color:#ff7f0e; }
+
+    </style>
+    """, unsafe_allow_html=True)
+
+    st.markdown("## 🔗 Cross-Framework Mapping")
+    st.markdown("Structured one-to-one mapping between India AI Governance, NIST AI RMF, and Unified Control Framework.")
+
+    # Load mapping file
+    df = pd.read_excel(
+        "data/India_AI_Cross_Framework_Mapping_Unique_OneToOne.xlsx",
         engine="openpyxl"
     )
 
-    nist_df = pd.read_csv("data/nist_ai_rmf_playbook.csv")
-    ucf_control = pd.read_csv("data/control_library.csv")
-    ucf_policy = pd.read_csv("data/policy_requirements.csv")
-    ucf_risk = pd.read_csv("data/risk_library.csv")
-
-    # ---------------------------------------------------
-    # Select India Control
-    # ---------------------------------------------------
-
+    # Dropdown
     selected_control = st.selectbox(
         "Select India AI Governance Control",
-        india_df["Control ID"] + " — " + india_df["Control Title"]
+        df["India Control ID"]
     )
 
-    control_id = selected_control.split(" — ")[0]
-    india_row = india_df[india_df["Control ID"] == control_id].iloc[0]
-
-    source_text = (
-        india_row["Control Title"] + " " +
-        india_row["Detailed Control Description (~150 words)"]
-    )
-
-    st.markdown("### 🇮🇳 Selected India Control")
-    st.write("**Control ID:**", control_id)
-    st.write("**Title:**", india_row["Control Title"])
-    st.write("**Lifecycle Stage:**", india_row["Lifecycle Stage"])
-    st.write("**Risk Level:**", india_row["Applicable Risk Level"])
-
-    # ---------------------------------------------------
-    # Hybrid NLP Matching Function
-    # ---------------------------------------------------
-
-    def hybrid_match(source_text, target_df, top_n=5):
-
-        df = target_df.copy()
-
-        # Combine all columns into one searchable string
-        df["combined_text"] = df.astype(str).agg(" ".join, axis=1)
-
-        # ---------------- TF-IDF ----------------
-        corpus = [source_text] + df["combined_text"].tolist()
-
-        vectorizer = TfidfVectorizer(stop_words="english")
-        tfidf_matrix = vectorizer.fit_transform(corpus)
-
-        cosine_scores = cosine_similarity(
-            tfidf_matrix[0:1],
-            tfidf_matrix[1:]
-        ).flatten()
-
-        # ---------------- Fuzzy Matching ----------------
-        fuzzy_scores = df["combined_text"].apply(
-            lambda x: fuzz.partial_ratio(
-                source_text.lower(),
-                x.lower()
-            )
-        ) / 100
-
-        # ---------------- Keyword Overlap ----------------
-        source_keywords = set(source_text.lower().split())
-
-        def keyword_score(text):
-            target_keywords = set(str(text).lower().split())
-            if len(target_keywords) == 0:
-                return 0
-            overlap = source_keywords.intersection(target_keywords)
-            return len(overlap) / len(source_keywords)
-
-        keyword_scores = df["combined_text"].apply(keyword_score)
-
-        # ---------------- Final Weighted Score ----------------
-        final_score = (
-            0.5 * cosine_scores +      # semantic similarity
-            0.3 * fuzzy_scores +       # string closeness
-            0.2 * keyword_scores       # keyword overlap
-        )
-
-        df["similarity_score"] = final_score
-
-        return df.sort_values(
-            "similarity_score",
-            ascending=False
-        ).head(top_n)
-
-    # ---------------------------------------------------
-    # Generate Matches
-    # ---------------------------------------------------
-
-    nist_matches = hybrid_match(source_text, nist_df, 5)
-    ucf_control_matches = hybrid_match(source_text, ucf_control, 5)
-    ucf_policy_matches = hybrid_match(source_text, ucf_policy, 5)
-    ucf_risk_matches = hybrid_match(source_text, ucf_risk, 5)
-
-    # ---------------------------------------------------
-    # Display Results
-    # ---------------------------------------------------
-
-    def display_section(title, df):
-
-        st.markdown(f"---")
-        st.markdown(f"### {title}")
-
-        if len(df) == 0:
-            st.info("No strong similarity matches found.")
-        else:
-            display_cols = ["similarity_score"] + list(df.columns[:3])
-            st.dataframe(
-                df[display_cols].rename(
-                    columns={"similarity_score": "Similarity Score"}
-                )
-            )
-
-    display_section("🇺🇸 NIST AI RMF Matches", nist_matches)
-    display_section("📘 UCF Control Library Matches", ucf_control_matches)
-    display_section("📜 UCF Policy Requirement Matches", ucf_policy_matches)
-    display_section("⚠ UCF Risk Library Matches", ucf_risk_matches)
+    row = df[df["India Control ID"] == selected_control].iloc[0]
 
     st.markdown("---")
-    st.markdown(
-        "🔍 **Mapping Engine:** Hybrid model combining TF-IDF semantic similarity, "
-        "fuzzy string matching, and keyword overlap scoring."
-    )
+
+    # India Card
+    st.markdown(f"""
+    <div class="framework-card india">
+        <span class="badge india-badge">🇮🇳 India AI Governance</span>
+        <h4>{row['India Control ID']}</h4>
+        <p><b>Title:</b> {row['India Control Title']}</p>
+        <p><b>Lifecycle Stage:</b> {row['Lifecycle Stage']}</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # NIST Card
+    st.markdown(f"""
+    <div class="framework-card nist">
+        <span class="badge nist-badge">🇺🇸 NIST AI RMF</span>
+        <h4>{row['Mapped NIST Control']}</h4>
+        <p><b>Function:</b> {row['Mapped NIST Function']}</p>
+        <p><b>Similarity Score:</b> {row['NIST Similarity Score']}</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # UCF Card
+    st.markdown(f"""
+    <div class="framework-card ucf">
+        <span class="badge ucf-badge">📘 Unified Control Framework</span>
+        <h4>{row['Mapped UCF Control']}</h4>
+        <p><b>Similarity Score:</b> {row['UCF Control Similarity Score']}</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("---")
+    st.info("Mapping follows lifecycle-aligned, structured one-to-one assignment without duplication."))
