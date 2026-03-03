@@ -47,47 +47,23 @@ with st.sidebar:
     st.markdown("## India AI Governance Playbook")
     st.markdown("Playbook is aligned with National AI Governance Framework India")
     st.markdown("---")
+    menu = st.sidebar.radio(
+    "Playbook Navigation",
+    [
+        "Overview",
+        "Plan & Govern",
+        "Define & Design",
+        "Develop & Train",
+        "Evaluate",
+        "Deploy",
+        "Monitor",
+        "Respond & Improve",
+        "Assure & Audit",
+        "Download Artifacts",
+        "Framework Reference"
+    ]
+)
 
-    st.markdown("### 📘 Core Framework")
-
-    menu = st.radio(
-        "",
-        [
-            "Overview",
-            "Control Catalog",
-            "Cross-Framework Mapping",
-        ]
-    )
-
-    st.markdown("---")
-
-    st.markdown("### 🔄 Lifecycle Modules")
-
-    lifecycle = st.radio(
-        "",
-        [
-            "Plan & Govern",
-            "Define & Design",
-            "Develop & Train",
-            "Evaluate",
-            "Deploy",
-            "Monitor",
-            "Respond & Improve",
-            "Assure & Audit",
-        ]
-    )
-
-    st.markdown("---")
-
-    st.markdown("### 📂 Resources")
-
-    resources = st.radio(
-        "",
-        [
-            "Download Artifacts",
-            "Framework Reference",
-        ]
-    )
 
 if menu == "Overview":
     overview.render()
