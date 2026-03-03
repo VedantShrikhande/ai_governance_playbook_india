@@ -8,6 +8,35 @@ Original file is located at
 """
 
 import streamlit as st
+st.markdown("""
+<style>
+.hero {
+    background: linear-gradient(135deg, #1f4e79 0%, #0d1b2a 100%);
+    padding: 50px 40px;
+    border-radius: 18px;
+    color: white;
+    margin-bottom: 30px;
+}
+
+.hero h1 {
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    font-size: 18px;
+    opacity: 0.9;
+}
+</style>
+
+<div class="hero">
+    <h1>🇮🇳 India AI Governance Playbook</h1>
+    <p>
+    Operationalizing the National AI Governance Framework into structured,
+    lifecycle-aligned, cross-framework intelligence workflows.
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
 def render():
     st.header("📘 Overview")
