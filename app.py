@@ -51,6 +51,8 @@ with st.sidebar:
     "Playbook Navigation",
     [
         "Overview",
+        "Control Catalog",
+        "Cross-Framework Mapping",
         "Plan & Govern",
         "Define & Design",
         "Develop & Train",
