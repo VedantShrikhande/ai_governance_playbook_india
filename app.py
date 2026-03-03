@@ -42,13 +42,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-st.title("India AI Governance Playbook")
-st.markdown("Playbook is aligned with National AI Governance Framework India")
-
-
 with st.sidebar:
 
-    st.markdown("## 🇮🇳 AI Governance Playbook")
+    st.markdown("## India AI Governance Playbook")
+    st.markdown("Playbook is aligned with National AI Governance Framework India")
     st.markdown("---")
 
     st.markdown("### 📘 Core Framework")
