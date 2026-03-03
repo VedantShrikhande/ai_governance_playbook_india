@@ -8,7 +8,10 @@ Original file is located at
 """
 
 import streamlit as st
-st.markdown("""
+
+
+def render():
+    st.markdown("""
 <style>
 .hero {
     background: linear-gradient(135deg, #1f4e79 0%, #0d1b2a 100%);
@@ -37,8 +40,6 @@ st.markdown("""
     </p>
 </div>
 """, unsafe_allow_html=True)
-
-def render():
     st.header("📘 Overview")
 
     st.markdown("""
