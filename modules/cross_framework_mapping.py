@@ -135,13 +135,14 @@ def render():
         <h4>{row['Mapped NIST Control']}</h4>
         <p><b>Function:</b> {row['Mapped NIST Function']}</p>
     
-        <hr style="margin:15px 0;">
-        <p>
-            🔗 <a href="https://airc.nist.gov/airmf-resources/playbook/" 
-            target="_blank" style="color:#2ca02c; font-weight:600; text-decoration:none;">
+        <div style="margin-top:15px;">
+            🔗 <a href="https://airc.nist.gov/airmf-resources/playbook/"
+            target="_blank"
+            style="color:#2ca02c; font-weight:600; text-decoration:none;">
             View Official NIST AI RMF Playbook
             </a>
-        </p>
+        </div>
+    
     </div>
     """, unsafe_allow_html=True)
 
