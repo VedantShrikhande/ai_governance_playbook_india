@@ -134,17 +134,18 @@ def render():
         <span class="badge nist-badge">🇺🇸 NIST AI RMF</span>
         <h4>{row['Mapped NIST Control']}</h4>
         <p><b>Function:</b> {row['Mapped NIST Function']}</p>
-    
-        <div style="margin-top:15px;">
-            🔗 <a href="https://airc.nist.gov/airmf-resources/playbook/"
-            target="_blank"
-            style="color:#2ca02c; font-weight:600; text-decoration:none;">
-            View Official NIST AI RMF Playbook
-            </a>
-        </div>
-    
     </div>
     """, unsafe_allow_html=True)
+
+    st.markdown(
+    """
+    <a href="https://airc.nist.gov/airmf-resources/playbook/" target="_blank"
+    style="color:#2ca02c; font-weight:600; text-decoration:none;">
+    🔗 View Official NIST AI RMF Playbook
+    </a>
+    """,
+    unsafe_allow_html=True
+    )
 
     # --------------------------------------------------
     # UCF Card
@@ -154,16 +155,18 @@ def render():
     <div class="framework-card ucf">
         <span class="badge ucf-badge">📘 Unified Control Framework</span>
         <h4>{row['Mapped UCF Control']}</h4>
-    
-        <hr style="margin:15px 0;">
-        <p>
-            🔗 <a href="https://ianatcredoai.github.io/UCF_Figures/" 
-            target="_blank" style="color:#ff7f0e; font-weight:600; text-decoration:none;">
-            View Unified Control Framework Reference
-            </a>
-        </p>
     </div>
     """, unsafe_allow_html=True)
+
+    st.markdown(
+        """
+        <a href="https://ianatcredoai.github.io/UCF_Figures/" target="_blank"
+        style="color:#ff7f0e; font-weight:600; text-decoration:none;">
+        🔗 View Unified Control Framework Reference
+        </a>
+        """,
+        unsafe_allow_html=True
+    )
 
     st.markdown("---")
 
