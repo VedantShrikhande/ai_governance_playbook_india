@@ -118,7 +118,7 @@ def render():
 
     st.markdown(f"""
     <div class="framework-card india">
-        <span class="badge india-badge">🇮🇳 India AI Governance</span>
+        <span class="badge india-badge"> India AI Governance</span>
         <h4>{row['India Control ID']}</h4>
         <p><b>Title:</b> {row['India Control Title']}</p>
         <p><b>Lifecycle Stage:</b> {row['Lifecycle Stage']}</p>
@@ -131,7 +131,7 @@ def render():
 
     st.markdown(f"""
     <div class="framework-card nist">
-        <span class="badge nist-badge">🇺🇸 NIST AI RMF</span>
+        <span class="badge nist-badge"> US NIST AI RMF</span>
         <h4>{row['Mapped NIST Control']}</h4>
         <p><b>Function:</b> {row['Mapped NIST Function']}</p>
     </div>
@@ -143,7 +143,7 @@ def render():
 
     st.markdown(f"""
     <div class="framework-card ucf">
-        <span class="badge ucf-badge">📘 Unified Control Framework</span>
+        <span class="badge ucf-badge"> Unified Control Framework</span>
         <h4>{row['Mapped UCF Control']}</h4>
     </div>
     """, unsafe_allow_html=True)
@@ -151,6 +151,5 @@ def render():
     st.markdown("---")
 
     st.success(
-        "✔ Mapping follows unique one-to-one structured lifecycle alignment. "
-        "No duplication across frameworks."
+        "✔ Mapping follows structured lifecycle alignment. "
     )
