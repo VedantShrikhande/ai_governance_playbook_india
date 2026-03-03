@@ -17,34 +17,43 @@ def render():
     # --------------------------------------------------
 
     st.markdown("""
-    <style>
-    .framework-card {
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 14px;
-        box-shadow: 0px 4px 12px rgba(0,0,0,0.06);
-        margin-bottom: 18px;
-    }
+<style>
+.framework-card {
+    background-color: #ffffff;
+    color: #000000 !important;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.06);
+    margin-bottom: 18px;
+}
 
-    .india { border-left: 6px solid #1f4e79; }
-    .nist  { border-left: 6px solid #2ca02c; }
-    .ucf   { border-left: 6px solid #ff7f0e; }
+.framework-card h4 {
+    color: #000000 !important;
+}
 
-    .badge {
-        font-weight: 600;
-        font-size: 14px;
-        padding: 5px 12px;
-        border-radius: 20px;
-        display: inline-block;
-        margin-bottom: 10px;
-    }
+.framework-card p {
+    color: #000000 !important;
+}
 
-    .india-badge { background-color:#e8f0fe; color:#1f4e79; }
-    .nist-badge  { background-color:#e6f4ea; color:#2ca02c; }
-    .ucf-badge   { background-color:#fff3e0; color:#ff7f0e; }
+.india { border-left: 6px solid #1f4e79; }
+.nist  { border-left: 6px solid #2ca02c; }
+.ucf   { border-left: 6px solid #ff7f0e; }
 
-    </style>
-    """, unsafe_allow_html=True)
+.badge {
+    font-weight: 600;
+    font-size: 14px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.india-badge { background-color:#e8f0fe; color:#000000; }
+.nist-badge  { background-color:#e6f4ea; color:#000000; }
+.ucf-badge   { background-color:#fff3e0; color:#000000; }
+
+</style>
+""", unsafe_allow_html=True)
 
     st.markdown("## 🔗 Cross-Framework Mapping")
     st.markdown(
