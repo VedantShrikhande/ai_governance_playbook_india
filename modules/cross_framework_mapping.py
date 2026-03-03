@@ -9,13 +9,21 @@ Original file is located at
 
 import streamlit as st
 import pandas as pd
+import numpy as np
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from rapidfuzz import fuzz
 
 
 def render():
 
-    st.markdown("## 🔗 Cross-Framework Control Mapping")
+    st.markdown("## 🔗 Cross-Framework Control Mapping (Hybrid NLP Engine)")
 
-    # Load datasets
+    # ---------------------------------------------------
+    # Load Datasets
+    # ---------------------------------------------------
+
     india_df = pd.read_excel(
         "data/India_AI_Governance_Framework_Playbook_FINAL_DETAILED.xlsx",
         engine="openpyxl"
@@ -26,71 +34,120 @@ def render():
     ucf_policy = pd.read_csv("data/policy_requirements.csv")
     ucf_risk = pd.read_csv("data/risk_library.csv")
 
+    # ---------------------------------------------------
     # Select India Control
+    # ---------------------------------------------------
+
     selected_control = st.selectbox(
         "Select India AI Governance Control",
         india_df["Control ID"] + " — " + india_df["Control Title"]
     )
 
     control_id = selected_control.split(" — ")[0]
-
     india_row = india_df[india_df["Control ID"] == control_id].iloc[0]
 
-    st.markdown("### 🇮🇳 India AI Governance Control")
+    source_text = (
+        india_row["Control Title"] + " " +
+        india_row["Detailed Control Description (~150 words)"]
+    )
+
+    st.markdown("### 🇮🇳 Selected India Control")
+    st.write("**Control ID:**", control_id)
     st.write("**Title:**", india_row["Control Title"])
     st.write("**Lifecycle Stage:**", india_row["Lifecycle Stage"])
     st.write("**Risk Level:**", india_row["Applicable Risk Level"])
-    st.write("**Description:**")
-    st.write(india_row["Detailed Control Description (~150 words)"])
 
-    # 🔎 SIMPLE KEYWORD MATCHING
-    keywords = india_row["Control Title"].lower().split()
+    # ---------------------------------------------------
+    # Hybrid NLP Matching Function
+    # ---------------------------------------------------
 
-    def keyword_filter(df, column):
-        return df[df[column].str.lower().apply(
-            lambda x: any(word in x for word in keywords)
-        )]
+    def hybrid_match(source_text, target_df, top_n=5):
 
-    # NIST Mapping
+        df = target_df.copy()
+
+        # Combine all columns into one searchable string
+        df["combined_text"] = df.astype(str).agg(" ".join, axis=1)
+
+        # ---------------- TF-IDF ----------------
+        corpus = [source_text] + df["combined_text"].tolist()
+
+        vectorizer = TfidfVectorizer(stop_words="english")
+        tfidf_matrix = vectorizer.fit_transform(corpus)
+
+        cosine_scores = cosine_similarity(
+            tfidf_matrix[0:1],
+            tfidf_matrix[1:]
+        ).flatten()
+
+        # ---------------- Fuzzy Matching ----------------
+        fuzzy_scores = df["combined_text"].apply(
+            lambda x: fuzz.partial_ratio(
+                source_text.lower(),
+                x.lower()
+            )
+        ) / 100
+
+        # ---------------- Keyword Overlap ----------------
+        source_keywords = set(source_text.lower().split())
+
+        def keyword_score(text):
+            target_keywords = set(str(text).lower().split())
+            if len(target_keywords) == 0:
+                return 0
+            overlap = source_keywords.intersection(target_keywords)
+            return len(overlap) / len(source_keywords)
+
+        keyword_scores = df["combined_text"].apply(keyword_score)
+
+        # ---------------- Final Weighted Score ----------------
+        final_score = (
+            0.5 * cosine_scores +      # semantic similarity
+            0.3 * fuzzy_scores +       # string closeness
+            0.2 * keyword_scores       # keyword overlap
+        )
+
+        df["similarity_score"] = final_score
+
+        return df.sort_values(
+            "similarity_score",
+            ascending=False
+        ).head(top_n)
+
+    # ---------------------------------------------------
+    # Generate Matches
+    # ---------------------------------------------------
+
+    nist_matches = hybrid_match(source_text, nist_df, 5)
+    ucf_control_matches = hybrid_match(source_text, ucf_control, 5)
+    ucf_policy_matches = hybrid_match(source_text, ucf_policy, 5)
+    ucf_risk_matches = hybrid_match(source_text, ucf_risk, 5)
+
+    # ---------------------------------------------------
+    # Display Results
+    # ---------------------------------------------------
+
+    def display_section(title, df):
+
+        st.markdown(f"---")
+        st.markdown(f"### {title}")
+
+        if len(df) == 0:
+            st.info("No strong similarity matches found.")
+        else:
+            display_cols = ["similarity_score"] + list(df.columns[:3])
+            st.dataframe(
+                df[display_cols].rename(
+                    columns={"similarity_score": "Similarity Score"}
+                )
+            )
+
+    display_section("🇺🇸 NIST AI RMF Matches", nist_matches)
+    display_section("📘 UCF Control Library Matches", ucf_control_matches)
+    display_section("📜 UCF Policy Requirement Matches", ucf_policy_matches)
+    display_section("⚠ UCF Risk Library Matches", ucf_risk_matches)
+
     st.markdown("---")
-    st.markdown("### 🇺🇸 Mapped NIST AI RMF Controls")
-
-    if "Control Title" in nist_df.columns:
-        nist_matches = keyword_filter(nist_df, "Control Title")
-    else:
-        nist_matches = nist_df.head(5)
-
-    if len(nist_matches) > 0:
-        st.dataframe(nist_matches.head(10))
-    else:
-        st.info("No direct keyword match found.")
-
-    # UCF Control Library
-    st.markdown("### 📘 Unified Control Framework – Control Library")
-
-    if "control_name" in ucf_control.columns:
-        ucf_matches = keyword_filter(ucf_control, "control_name")
-    else:
-        ucf_matches = ucf_control.head(5)
-
-    st.dataframe(ucf_matches.head(10))
-
-    # UCF Policy Requirements
-    st.markdown("### 📜 Unified Control Framework – Policy Requirements")
-
-    if "policy_title" in ucf_policy.columns:
-        policy_matches = keyword_filter(ucf_policy, "policy_title")
-    else:
-        policy_matches = ucf_policy.head(5)
-
-    st.dataframe(policy_matches.head(10))
-
-    # UCF Risk Library
-    st.markdown("### ⚠ Unified Control Framework – Risk Library")
-
-    if "risk_name" in ucf_risk.columns:
-        risk_matches = keyword_filter(ucf_risk, "risk_name")
-    else:
-        risk_matches = ucf_risk.head(5)
-
-    st.dataframe(risk_matches.head(10))
+    st.markdown(
+        "🔍 **Mapping Engine:** Hybrid model combining TF-IDF semantic similarity, "
+        "fuzzy string matching, and keyword overlap scoring."
+    )
