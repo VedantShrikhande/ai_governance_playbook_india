@@ -11,6 +11,7 @@ import streamlit as st
 
 from modules import overview
 from modules import control_catalog
+import modules.cross_framework_mapping as cross_framework_mapping
 from modules import plan_govern
 from modules import define_design
 from modules import develop_train
@@ -50,6 +51,7 @@ menu = st.sidebar.radio(
     [
         "Overview",
         "Control Catalog",
+        "Cross-Framework Mapping",
         "Plan & Govern",
         "Define & Design",
         "Develop & Train",
@@ -68,6 +70,9 @@ if menu == "Overview":
 
 elif menu == "Control Catalog":
     control_catalog.render()
+
+elif menu == "Cross-Framework Mapping":
+    cross_framework_mapping.render()
 
 elif menu == "Plan & Govern":
     plan_govern.render()
