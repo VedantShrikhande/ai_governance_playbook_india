@@ -33,14 +33,14 @@ def render():
 </style>
 
 <div class="hero">
-    <h1>🇮🇳 India AI Governance Playbook</h1>
+    <h1>India AI Governance Playbook</h1>
     <p>
     Operationalizing the National AI Governance Framework into structured,
     lifecycle-aligned, cross-framework intelligence workflows.
     </p>
 </div>
 """, unsafe_allow_html=True)
-    st.header("📘 Overview")
+    st.header("Overview")
 
     st.markdown("""
     ### Purpose
