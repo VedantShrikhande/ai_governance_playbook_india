@@ -12,164 +12,150 @@ import pandas as pd
 
 def render():
 
-    # --------------------------------------------------
-    # Aesthetic Styling
-    # --------------------------------------------------
-
-    st.markdown("""
-<style>
-.framework-card {
-    background-color: #ffffff;
-    color: #000000 !important;
-    padding: 20px;
-    border-radius: 14px;
-    box-shadow: 0px 4px 12px rgba(0,0,0,0.06);
-    margin-bottom: 18px;
-}
-
-.framework-card h4 {
-    color: #000000 !important;
-}
-
-.framework-card p {
-    color: #000000 !important;
-}
-
-.india { border-left: 6px solid #1f4e79; }
-.nist  { border-left: 6px solid #2ca02c; }
-.ucf   { border-left: 6px solid #ff7f0e; }
-
-.badge {
-    font-weight: 600;
-    font-size: 14px;
-    padding: 5px 12px;
-    border-radius: 20px;
-    display: inline-block;
-    margin-bottom: 10px;
-}
-
-.india-badge { background-color:#e8f0fe; color:#000000; }
-.nist-badge  { background-color:#e6f4ea; color:#000000; }
-.ucf-badge   { background-color:#fff3e0; color:#000000; }
-
-</style>
-""", unsafe_allow_html=True)
-
-    st.markdown("## 🔗 Cross-Framework Mapping")
-    st.markdown(
-        "Structured one-to-one lifecycle-aligned mapping between "
-        "India AI Governance Framework, NIST AI RMF, and Unified Control Framework."
-    )
-
-    # --------------------------------------------------
-    # Load Mapping Excel
-    # --------------------------------------------------
-
-    df = pd.read_excel(
-        "data/India_AI_Cross_Framework_Mapping_Unique_OneToOne.xlsx",
-        engine="openpyxl"
-    )
-
-    # --------------------------------------------------
-    # Filters
-    # --------------------------------------------------
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        lifecycle_filter = st.selectbox(
-            "Filter by Lifecycle Stage",
-            ["All"] + sorted(df["Lifecycle Stage"].dropna().unique())
-        )
-
-    with col2:
-        search = st.text_input("Search Control ID")
-
-    filtered_df = df.copy()
-
-    if lifecycle_filter != "All":
-        filtered_df = filtered_df[
-            filtered_df["Lifecycle Stage"] == lifecycle_filter
-        ]
-
-    if search:
-        filtered_df = filtered_df[
-            filtered_df["India Control ID"].str.contains(search, case=False)
-        ]
-
-    # --------------------------------------------------
-    # Control Selection
-    # --------------------------------------------------
-
-    selected_control = st.selectbox(
-        "Select India AI Governance Control",
-        filtered_df["India Control ID"]
-    )
-
-    row = filtered_df[
-        filtered_df["India Control ID"] == selected_control
-    ].iloc[0]
-
-    st.markdown("---")
-
-    # --------------------------------------------------
-    # India Card
-    # --------------------------------------------------
-
-    st.markdown(f"""
-    <div class="framework-card india">
-        <span class="badge india-badge"> India AI Governance</span>
-        <h4>{row['India Control ID']}</h4>
-        <p><b>Title:</b> {row['India Control Title']}</p>
-        <p><b>Lifecycle Stage:</b> {row['Lifecycle Stage']}</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # --------------------------------------------------
-    # NIST Card
-    # --------------------------------------------------
-
-    st.markdown(f"""
-    <div class="framework-card nist">
-        <span class="badge nist-badge">🇺🇸 NIST AI RMF</span>
-        <h4>{row['Mapped NIST Control']}</h4>
-        <p><b>Function:</b> {row['Mapped NIST Function']}</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown(
-    """
-    <a href="https://airc.nist.gov/airmf-resources/playbook/" target="_blank"
-    style="color:#2ca02c; font-weight:600; text-decoration:none;">
-    🔗 View Official NIST AI RMF Playbook
-    </a>
-    """,
-    unsafe_allow_html=True
-    )
-
-    # --------------------------------------------------
-    # UCF Card
-    # --------------------------------------------------
-
-    st.markdown(f"""
-    <div class="framework-card ucf">
-        <span class="badge ucf-badge">📘 Unified Control Framework</span>
-        <h4>{row['Mapped UCF Control']}</h4>
-    </div>
-    """, unsafe_allow_html=True)
+    st.title("Cross-Framework Control Mapping")
 
     st.markdown(
         """
-        <a href="https://ianatcredoai.github.io/UCF_Figures/" target="_blank"
-        style="color:#ff7f0e; font-weight:600; text-decoration:none;">
-        🔗 View Unified Control Framework Reference
-        </a>
+        This section maps **India AI Governance Framework controls**
+        with corresponding controls from:
+
+        • **NIST AI Risk Management Framework (AI RMF)**  
+        • **Unified Control Framework (UCF)**  
+
+        The mapping provides **cross-framework traceability**, enabling organizations
+        to align governance, compliance, and risk management across global standards.
+        """
+    )
+
+    # Load dataset
+    df = pd.read_excel("data/india_nist_ucf_mapping.xlsx")
+
+    # Unique India controls
+    india_controls = df["India_Control_ID"].unique()
+
+    selected_control = st.selectbox(
+        "Select India AI Governance Control",
+        india_controls
+    )
+
+    # Filter dataset
+    control_df = df[df["India_Control_ID"] == selected_control]
+
+    # Get title
+    control_title = control_df["India_Control_Title"].iloc[0]
+
+    st.markdown("---")
+
+    # INDIA CONTROL CARD
+    st.markdown(
+        f"""
+        <div style="
+            background:#f5f5f5;
+            padding:20px;
+            border-radius:12px;
+            border-left:6px solid #1f77b4;
+            margin-bottom:20px;
+        ">
+        <span style="background:#d6e4ff;padding:6px 12px;border-radius:20px;font-size:13px;">
+        🇮🇳 India AI Governance Framework
+        </span>
+
+        <h3 style="margin-top:10px;color:black;">
+        {selected_control}
+        </h3>
+
+        <p style="color:black;">
+        <b>Title:</b> {control_title}
+        </p>
+
+        </div>
         """,
         unsafe_allow_html=True
     )
 
+    # NIST SECTION
+    st.subheader("🇺🇸 Mapped NIST AI RMF Controls")
+
+    nist_df = control_df[["NIST_Control_ID", "Similarity_India_NIST_Description"]]
+
+    for _, row in nist_df.iterrows():
+
+        st.markdown(
+            f"""
+            <div style="
+                background:#f8fff8;
+                padding:18px;
+                border-radius:10px;
+                border-left:5px solid #2ca02c;
+                margin-bottom:15px;
+            ">
+
+            <span style="background:#d9f7e5;padding:5px 10px;border-radius:20px;font-size:12px;">
+            US NIST AI RMF
+            </span>
+
+            <h4 style="color:black;margin-top:10px;">
+            {row["NIST_Control_ID"]}
+            </h4>
+
+            <p style="color:black;">
+            {row["Similarity_India_NIST_Description"]}
+            </p>
+
+            <a href="https://airc.nist.gov/airmf-resources/playbook/"
+            target="_blank"
+            style="color:#2ca02c;font-weight:600;">
+            🔗 View NIST AI RMF Playbook
+            </a>
+
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+    # UCF SECTION
+    st.subheader("📘 Mapped Unified Control Framework Controls")
+
+    ucf_df = control_df[["UCF_Control_ID", "Similarity_India_UCF_Description"]]
+
+    for _, row in ucf_df.iterrows():
+
+        st.markdown(
+            f"""
+            <div style="
+                background:#fff7f0;
+                padding:18px;
+                border-radius:10px;
+                border-left:5px solid #ff7f0e;
+                margin-bottom:15px;
+            ">
+
+            <span style="background:#ffe4cc;padding:5px 10px;border-radius:20px;font-size:12px;">
+            Unified Control Framework
+            </span>
+
+            <h4 style="color:black;margin-top:10px;">
+            {row["UCF_Control_ID"]}
+            </h4>
+
+            <p style="color:black;">
+            {row["Similarity_India_UCF_Description"]}
+            </p>
+
+            <a href="https://ianatcredoai.github.io/UCF_Figures/"
+            target="_blank"
+            style="color:#ff7f0e;font-weight:600;">
+            🔗 View Unified Control Framework Reference
+            </a>
+
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
     st.markdown("---")
 
-    st.success(
-        "✔ Mapping follows structured lifecycle alignment. "
+    st.info(
+        "This mapping demonstrates how India AI governance controls align "
+        "with global AI risk management and compliance frameworks."
     )
