@@ -38,6 +38,3 @@ def render():
         st.success("✅ Governance Foundation Established")
     else:
         st.info("Complete all tasks to establish governance foundation")
-    st.table(pd.DataFrame(data))
-
-    st.success("Outcome: Governance Foundation Established")
