@@ -14,6 +14,7 @@ def render():
     st.header("🏛 Plan & Govern")
 
     st.subheader("Key Tasks")
+    
     tasks = [
         "Appoint CARO",
         "Constitute AIREC",
@@ -21,20 +22,22 @@ def render():
         "Create AI Inventory",
         "Approve Prohibited Use Cases"
     ]
-
+    
+    completed = 0
+    
     for task in tasks:
-        st.checkbox(task)
-
-    st.subheader("Roles & Responsibilities")
-    data = {
-        "Role": ["Board", "CARO", "AIREC", "Model Owner"],
-        "Primary Responsibility": [
-            "Approve governance charter",
-            "AI risk ownership",
-            "High-risk approvals",
-            "Operational management"
-        ]
-    }
+        if st.checkbox(task):
+            completed += 1
+    
+    progress = completed / len(tasks)
+    st.progress(progress)
+    
+    st.write(f"Governance Readiness: {int(progress*100)}%")
+    
+    if progress == 1:
+        st.success("✅ Governance Foundation Established")
+    else:
+        st.info("Complete all tasks to establish governance foundation")
     st.table(pd.DataFrame(data))
 
     st.success("Outcome: Governance Foundation Established")
